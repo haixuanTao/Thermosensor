@@ -1,7 +1,7 @@
 FROM python:3.9-slim
 
-RUN pip install prometheus_client
+# RUN pip install prometheus_client
 
-COPY . /
+# COPY . /
 
 # CMD python /client.py
