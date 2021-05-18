@@ -1,4 +1,9 @@
-Modus Operandi
+# Summary
+
+This is a guide to install kubernetes, prometheus and grafana onto the raspberry-pi in
+order to monitor temperature and ph for sake brewing.
+
+# Modus Operandi
 
 ## SD Card
 
@@ -48,6 +53,8 @@ ssh pi@raspberrypi.local
 
 - Password is: `raspberry`
 - If you see something like`pi@raspberrypi: ~ $`, Congrats, you're now developing on the raspberry-pi. 👯‍♀️👯‍♀️👯‍♀️
+
+The rest can be done directly by copying the content of installation.sh into the command line.
 
 ## Kubernetes
 
@@ -178,12 +185,11 @@ k --namespace default port-forward $POD_NAME 3000
 ```bash
 sudo modprobe w1-gpio
 sudo modprobe w1-therm
-sudo nano /etc/modules
-echo 'w1_gpio' >> /etc/modules
-echo 'w1_therm' >> /etc/modules
+sudo sh -c "echo 'w1_gpio' >> /etc/modules"
+sudo sh -c "echo 'w1_therm' >> /etc/modules"
 cd /sys/bus/w1/devices/
-# Check the name of the devices
 ls
+# Check the name of the devices
 cat /sys/bus/w1/devices/28-3c01d075f67c/w1_slave
 ```
 

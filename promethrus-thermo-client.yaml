@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: thermo-deployment
+  labels:
+    app: thermo
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: thermo
+  template:
+    metadata:
+      labels:
+        app: thermo
+    spec:
+      containers:
+      - name: thermo
+        image: haixuantao/thermosensor:latest
+        ports:
+        - containerPort: 80

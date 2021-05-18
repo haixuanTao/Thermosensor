@@ -20,3 +20,11 @@ helm install prometheus-wakaze prometheus-community/prometheus
 helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
 helm install grafana-wakaze grafana/grafana
+
+
+sudo modprobe w1-gpio
+sudo modprobe w1-therm
+sudo sh -c "echo 'w1_gpio' >> /etc/modules"
+sudo sh -c "echo 'w1_therm' >> /etc/modules"
+cd /sys/bus/w1/devices/
+ls
