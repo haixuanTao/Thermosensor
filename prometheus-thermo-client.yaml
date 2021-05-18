@@ -19,6 +19,6 @@ spec:
         image: haixuantao/thermosensor:latest
         ports:
         - containerPort: 80
-      volumeMounts:
-      - name: redis-storage
-        mountPath: /sys/bus/
+        volumeMounts:
+        - name: redis-storage
+          mountPath: /sys/bus/
