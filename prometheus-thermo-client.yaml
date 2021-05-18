@@ -20,5 +20,10 @@ spec:
         ports:
         - containerPort: 80
         volumeMounts:
-        - name: redis-storage
+        - name: temperature-storage
           mountPath: /sys/bus/
+      volumes:
+        - name: temperature-storage
+          hostPath:
+            path: /sys/bus/
+            type: DirectoryOrCreate
