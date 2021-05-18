@@ -14,7 +14,6 @@ os.system("modprobe w1-therm")
 
 base_dir = "/sys/bus/w1/devices/"
 device_folder = glob.glob(base_dir + "28*")
-device_file = device_folder
 
 
 def read_temp_raw(device_file):
@@ -42,7 +41,7 @@ class CustomCollector(object):
             "temperature", "Help text", labels=["temperature_sensor"]
         )
         for device in device_folder:
-            c.add_metric([device], read_temp(device))
+            c.add_metric([device.strip(base_dir)], read_temp(device))
         yield c
 
 
