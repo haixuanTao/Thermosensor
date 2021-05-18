@@ -52,5 +52,5 @@ if __name__ == "__main__":
     # Start up the server to expose the metrics.
     start_http_server(8000)
     while True:
-        read_temp()
+        REGISTRY.collect()
         time.sleep(1)
