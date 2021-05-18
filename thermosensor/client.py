@@ -2,8 +2,8 @@ from prometheus_client.core import (
     GaugeMetricFamily,
     CounterMetricFamily,
     REGISTRY,
-    start_http_server,
 )
+from prometheus_client import start_http_server
 import os
 import glob
 import time
