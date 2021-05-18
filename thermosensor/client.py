@@ -37,7 +37,7 @@ def read_temp(device):
 
 class CustomCollector(object):
     def collect(self):
-        yield GaugeMetricFamily("temperature read", "temperature read", value=0)
+        yield GaugeMetricFamily("temperature_read", "temperature read", value=0)
         c = CounterMetricFamily(
             "temperature", "Help text", labels=["temperature_sensor"]
         )
