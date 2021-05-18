@@ -9,8 +9,6 @@ import glob
 import time
 
 
-REGISTRY.register(CustomCollector())
-
 os.system("modprobe w1-gpio")
 os.system("modprobe w1-therm")
 
