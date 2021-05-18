@@ -4,4 +4,4 @@ RUN pip install prometheus_client
 
 COPY . /
 
-CMD python /client.py
+# CMD python /client.py
