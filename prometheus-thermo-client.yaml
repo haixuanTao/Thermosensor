@@ -22,8 +22,14 @@ spec:
         volumeMounts:
         - name: temperature-storage
           mountPath: /sys/bus/
+        - name: ph-storage
+          mountPath: /dev/
       volumes:
         - name: temperature-storage
           hostPath:
             path: /sys/bus/
+            type: DirectoryOrCreate
+        - name: ph-storage
+          hostPath:
+            path: /dev/
             type: DirectoryOrCreate
