@@ -126,6 +126,26 @@ ssh pi@raspberrypi.local -L 9090:localhost:9090
 
 - And go to [localhost:9090](http://localhost:9090). If it works you now have a running prometheus instance. 🚀🚀🚀
 
+- Configure prometheus with:
+```
+k edit configmap prometheus-wakaze-server
+```
+
+and add after `scrape_configs:`
+
+```
+    - job_name: sensor
+      static_configs:
+      - targets:
+        - raspberrypi.local:8000
+```
+- then rescale prometheus:
+
+```
+k scale deploy prometheus-wakaze-server --replicas 0
+k scale deploy prometheus-wakaze-server --replicas 1
+```
+
 ## Grafana
 
 ```
@@ -149,11 +169,10 @@ SKoOd6Lm3QISd9nfpyeTT9SfzjyOkwyZJ7ujaE6r
 - Do an ssh port forwarding tp
 
 ```
-export POD_NAME=$(k get pods --namespace default -l "app.kubernetes.io/name=grafana,app.kubernetes.io/instance=grafana-wakaze" -o jsonpath="{.items[0].metadata.name}")
-k --namespace default port-forward $POD_NAME 3000
+k apply -f https://raw.githubusercontent.com/haixuanTao/Thermosensor/master/grafana-ingress.yaml
 ```
 
-- Working Grafana 🍭🍭🍭
+- Try : raspberry.local on your browser and you should have  a working Grafana 🍭🍭🍭
 
 ## Adding Prometheus DataSources
 
@@ -205,7 +224,7 @@ cat /sys/bus/w1/devices/28-3c01d075f67c/w1_slave
 > For more details you can check instructions at: https://tutorials-raspberrypi.com/raspberry-pi-temperature-sensor-1wire-ds18b20/
 
 
-# PH sensor
+## PH sensor
 
 - To use the ph sensor you need an MCP3008 Analog to Digital converter.
 
@@ -256,3 +275,14 @@ while True:
 ```
 > For more details you can check instructions at: https://learn.adafruit.com/raspberry-pi-analog-to-digital-converters/mcp3008
 
+## Python Script
+
+- Git clone the repo thermosensor and run it:
+
+```
+git clone https://github.com/haixuanTao/Thermosensor
+cd Thermosensor
+pip3 install -r requirement.txt
+python3 thermosensor/client.py
+```
+- You should now see data pouring in.
