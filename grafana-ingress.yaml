@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: nginx-ingress
+  name: grafana-wakaze
   annotations:
     kubernetes.io/ingress.class: traefik
 spec:
@@ -12,4 +12,4 @@ spec:
         pathType: Prefix
         backend:
           serviceName: grafana-wakaze
-          servicePort: 80
+          servicePort: 3000
