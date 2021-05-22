@@ -1,7 +1,11 @@
-FROM python:3.9-slim
+FROM arm64v8/python:latest
 
-# RUN pip install prometheus_client
+RUN apt-get update
 
-# COPY . /
+RUN apt-get -y install gcc
 
-# CMD python /client.py
+RUN pip install prometheus_client Adafruit_GPIO Adafruit_MCP3008
+
+COPY . /root/
+
+CMD ["python", "/root/client.py"]
