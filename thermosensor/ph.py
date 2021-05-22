@@ -1,39 +1,31 @@
-import time,sys,math
-from grove.adc import ADC
+import time
 
-__all__ = ["GrovePhSensor"]
-
-class GrovePhSensor(object):
-
-        def __init__(self, channel):
-                self.channel = channel
-                self.adc = ADC()
-        @property
-        def value(self):
-                return self.adc.read(self.channel)
-
-def main():
-#Connect the Grove PH Sensor to analog port A0
-        # SIG,NC,VCC,GND
-        sensor = GrovePhSensor(0)
+# Import SPI library (for hardware SPI) and MCP3008 library.
+import Adafruit_GPIO.SPI as SPI
+import Adafruit_MCP3008
 
 
-        # Reference voltage of ADC is 4.95v
-        Vref = 4.95
+# Software SPI configuration:
+# CLK  = 11
+# MISO = 9
+# MOSI = 10
+# CS   = 8
+# mcp = Adafruit_MCP3008.MCP3008(clk=CLK, cs=CS, miso=MISO, mosi=MOSI)
 
-        while True:
-                try:
-                # Read sensor value
-                # sensor_value = grove.analogRead(sensor)
-                # Calculate PH
-                # 7 means the neutral PH value,372 means the Reference value of ADC measured under neutral pH
-                # 59.16=Conversion method to convert the output voltage value to PH value.
-                        ph = 7 - 1000 * (GrovePhSensor.value-372) * Vref / 59.16 / 1023
+# Hardware SPI configuration:
+SPI_PORT   = 0
+SPI_DEVICE = 0
+mcp = Adafruit_MCP3008.MCP3008(spi=SPI.SpiDev(SPI_PORT, SPI_DEVICE))
 
-                        print("sensor_value =", GrovePhSensor.value, " ph =", ph)
 
-                except IOError:
-                        print ("Error")
-
-if __name__ == '__main__':
-        main()
+print('Reading MCP3008 values, press Ctrl-C to quit...')
+# Print nice channel column headers.
+# Main program loop.
+while True:
+    # Read all the ADC channel values in a list.
+        # The read_adc function will get the value of the specified channel (0-7).
+    values = mcp.read_adc(0)
+    print(values)
+    # Print the ADC values.
+    # Pause for half a second.
+    time.sleep(0.5)

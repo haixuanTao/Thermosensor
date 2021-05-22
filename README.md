@@ -203,3 +203,56 @@ cat /sys/bus/w1/devices/28-3c01d075f67c/w1_slave
 - If it work you now have a working thermo sensor 🔥🔥🔥
 
 > For more details you can check instructions at: https://tutorials-raspberrypi.com/raspberry-pi-temperature-sensor-1wire-ds18b20/
+
+
+# PH sensor
+
+- To use the ph sensor you need an MCP3008 Analog to Digital converter.
+
+- You should connect the MCP3008 as follows:
+    - MCP3008 VDD to Raspberry Pi 3.3V
+    - MCP3008 VREF to Raspberry Pi 3.3V
+    - MCP3008 AGND to Raspberry Pi GND
+    - MCP3008 DGND to Raspberry Pi GND
+    - MCP3008 CLK to Raspberry Pi SCLK
+    - MCP3008 DOUT to Raspberry Pi MISO
+    - MCP3008 DIN to Raspberry Pi MOSI
+    - MCP3008 CS/SHDN to Raspberry Pi CE0
+
+- You should then connect the PH Sensor Pin as follows:
+    - Red cable to RPI 5V
+    - Black cable to RPI GND
+    - Yellow cable to MCP3008 CH0
+
+- Then do:
+```bash
+sudo apt-get update
+sudo apt-get install build-essential python-dev python-smbus python-pip
+sudo pip3 install adafruit-mcp3008
+```
+
+- To check if it was setupped properly you can paste the following
+```
+python3
+
+# Wait for python to fire up
+
+import time
+
+# Import SPI library (for hardware SPI) and MCP3008 library.
+import Adafruit_GPIO.SPI as SPI
+import Adafruit_MCP3008
+
+# Hardware SPI configuration:
+SPI_PORT   = 0
+SPI_DEVICE = 0
+mcp = Adafruit_MCP3008.MCP3008(spi=SPI.SpiDev(SPI_PORT, SPI_DEVICE))
+
+print('Reading MCP3008 values, press Ctrl-C to quit...')
+while True:
+    values = mcp.read_adc(0)
+    print(values)
+    time.sleep(0.5)
+```
+> For more details you can check instructions at: https://learn.adafruit.com/raspberry-pi-analog-to-digital-converters/mcp3008
+

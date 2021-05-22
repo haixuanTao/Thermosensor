@@ -1,45 +1,26 @@
 from prometheus_client.core import (
     GaugeMetricFamily,
-    CounterMetricFamily,
     REGISTRY,
 )
 from prometheus_client import start_http_server
-import os
-import glob
 import time
-
-
-base_dir = "/sys/bus/w1/devices/"
-device_folder = glob.glob(base_dir + "28*")
-
-
-def read_temp_raw(device_file):
-    f = open(device_file, "r")
-    lines = f.readlines()
-    temp = 0
-    if lines[0].strip()[-3:] == "YES":
-        equals_position = lines[1].find("t=")
-        if equals_position != -1:
-            temp_string = lines[1][equals_position + 2 :]
-            temp = float(temp_string) / 1000.0
-    f.close()
-    return temp
-
-
-def read_temp(device):
-    temp = read_temp_raw(device + "/w1_slave")
-    return temp
-
+from reader import read_temperature, base_dir, device_folder, read_ph
 
 class CustomCollector(object):
     def collect(self):
-        yield GaugeMetricFamily("temperature_read", "temperature read", value=0)
-        c = CounterMetricFamily(
-            "temperature", "Help text", labels=["temperature_sensor"]
+        temperatures = GaugeMetricFamily(
+            "temperatures", "Temperature taken from sensors", labels=["temperature_sensor"]
         )
         for device in device_folder:
-            c.add_metric([device.strip(base_dir)], read_temp(device))
-        yield c
+            temperatures.add_metric([device.strip(base_dir)], read_temperature(device))
+        yield temperatures
+
+        phs = GaugeMetricFamily(
+            "phs", "PH taken from sensors", labels=["ph_sensor"]
+        )
+        for i in range(8):
+            phs.add_metric([f'ph_channel_{i}'], read_ph(i))
+        yield phs
 
 
 REGISTRY.register(CustomCollector())
