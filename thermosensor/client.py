@@ -14,19 +14,21 @@ class CustomCollector(object):
             "Temperature taken from sensors",
             labels=["temperature_sensor"],
         )
-        for device in device_folder:
-            temperatures.add_metric(
-                [device.strip(base_dir)], read_temperature(device)
+        try:
+            for device in device_folder:
+                temperatures.add_metric(
+                    [device.strip(base_dir)], read_temperature(device)
+                )
+            yield temperatures
+
+            phs = GaugeMetricFamily(
+                "phs", "PH taken from sensors", labels=["ph_sensor"]
             )
-        yield temperatures
-
-        phs = GaugeMetricFamily(
-            "phs", "PH taken from sensors", labels=["ph_sensor"]
-        )
-        for i in range(8):
-            phs.add_metric([f"ph_channel_{i}"], read_ph(i))
-        yield phs
-
+            for i in range(8):
+                phs.add_metric([f"ph_channel_{i}"], read_ph(i))
+            yield phs
+        except Exception as exc:
+            print(exc)
 
 REGISTRY.register(CustomCollector())
 
