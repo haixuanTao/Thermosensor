@@ -13,6 +13,7 @@ order to monitor temperature and ph for sake brewing.
   - Adding the following line:
 
 ```
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
 update_config=1
 country=FR
 
@@ -127,6 +128,7 @@ ssh pi@raspberrypi.local -L 9090:localhost:9090
 - And go to [localhost:9090](http://localhost:9090). If it works you now have a running prometheus instance. 🚀🚀🚀
 
 - Configure prometheus with:
+
 ```
 k edit configmap prometheus-wakaze-server
 ```
@@ -139,6 +141,7 @@ and add after `scrape_configs:`
       - targets:
         - raspberrypi.local:8000
 ```
+
 - then rescale prometheus:
 
 ```
@@ -157,22 +160,23 @@ helm install grafana-wakaze grafana/grafana
 - Then do this to get your password:
 
 ```
+sudo iptables -w -P FORWARD ACCEPT
 k get secret --namespace default grafana-wakaze -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
 ```
 
 - This will print like so:
 
 ```
-SKoOd6Lm3QISd9nfpyeTT9SfzjyOkwyZJ7ujaE6r
+GKEuKnsmQm4NcoleieTXgauKt6VQhkIoME6Gtnpk
 ```
 
-- Do an ssh port forwarding tp
+- Do an ingress forwarding with:
 
 ```
 k apply -f https://raw.githubusercontent.com/haixuanTao/Thermosensor/master/grafana-ingress.yaml
 ```
 
-- Try : raspberry.local on your browser and you should have  a working Grafana 🍭🍭🍭
+- Try : raspberry.local on your browser and you should have a working Grafana 🍭🍭🍭
 
 ## Adding Prometheus DataSources
 
@@ -194,6 +198,9 @@ k apply -f https://raw.githubusercontent.com/haixuanTao/Thermosensor/master/graf
 - type: `sudo raspi-config` in ssh console.
 - Select Interfacing Options
 - Select 1-Wire
+- Select Yes
+- Select Interfacing Options
+- Select SPI
 - Select Yes
 - `sudo reboot`
 
@@ -223,27 +230,29 @@ cat /sys/bus/w1/devices/28-3c01d075f67c/w1_slave
 
 > For more details you can check instructions at: https://tutorials-raspberrypi.com/raspberry-pi-temperature-sensor-1wire-ds18b20/
 
-
 ## PH sensor
 
 - To use the ph sensor you need an MCP3008 Analog to Digital converter.
 
 - You should connect the MCP3008 as follows:
-    - MCP3008 VDD to Raspberry Pi 3.3V
-    - MCP3008 VREF to Raspberry Pi 3.3V
-    - MCP3008 AGND to Raspberry Pi GND
-    - MCP3008 DGND to Raspberry Pi GND
-    - MCP3008 CLK to Raspberry Pi SCLK
-    - MCP3008 DOUT to Raspberry Pi MISO
-    - MCP3008 DIN to Raspberry Pi MOSI
-    - MCP3008 CS/SHDN to Raspberry Pi CE0
+
+  - MCP3008 VDD to Raspberry Pi 3.3V
+  - MCP3008 VREF to Raspberry Pi 3.3V
+  - MCP3008 AGND to Raspberry Pi GND
+  - MCP3008 DGND to Raspberry Pi GND
+  - MCP3008 CLK to Raspberry Pi SCLK
+  - MCP3008 DOUT to Raspberry Pi MISO
+  - MCP3008 DIN to Raspberry Pi MOSI
+  - MCP3008 CS/SHDN to Raspberry Pi CE0
 
 - You should then connect the PH Sensor Pin as follows:
-    - Red cable to RPI 5V
-    - Black cable to RPI GND
-    - Yellow cable to MCP3008 CH0
+
+  - Red cable to RPI 5V
+  - Black cable to RPI GND
+  - Yellow cable to MCP3008 CH0
 
 - Then do:
+
 ```bash
 sudo apt-get update
 sudo apt-get install build-essential python-dev python-smbus python-pip
@@ -251,6 +260,7 @@ sudo pip3 install adafruit-mcp3008
 ```
 
 - To check if it was setupped properly you can paste the following
+
 ```
 python3
 
@@ -273,6 +283,7 @@ while True:
     print(values)
     time.sleep(0.5)
 ```
+
 > For more details you can check instructions at: https://learn.adafruit.com/raspberry-pi-analog-to-digital-converters/mcp3008
 
 ## Python Script
@@ -283,6 +294,7 @@ while True:
 git clone https://github.com/haixuanTao/Thermosensor
 cd Thermosensor
 pip3 install -r requirement.txt
-python3 thermosensor/client.py
+python3 thermosensor/client.py &
 ```
+
 - You should now see data pouring in.
