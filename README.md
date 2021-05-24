@@ -133,13 +133,13 @@ ssh pi@raspberrypi.local -L 9090:localhost:9090
 k edit configmap prometheus-wakaze-server
 ```
 
-and add after `scrape_configs:`
+and add after `scrape_configs:` using the raspberry pi IP
 
 ```
     - job_name: sensor
       static_configs:
       - targets:
-        - raspberrypi.local:8000
+        - 192.168.1.29:8000
 ```
 
 - then rescale prometheus:
@@ -168,6 +168,16 @@ k get secret --namespace default grafana-wakaze -o jsonpath="{.data.admin-passwo
 
 ```
 GKEuKnsmQm4NcoleieTXgauKt6VQhkIoME6Gtnpk
+```
+
+- Optionally add Metallb:
+
+```
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.6/manifests/namespace.yaml
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.6/manifests/metallb.yaml
+kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
+k delete svc grafana-wakaze
+k expose deploy grafana-wakaze --type LoadBalancer
 ```
 
 - Do an ingress forwarding with:
