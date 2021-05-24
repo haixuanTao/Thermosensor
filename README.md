@@ -309,4 +309,16 @@ sudo systemctl start client.service
 sudo systemctl enable client.service
 ```
 
+- Check:
+```
+curl localhost:8000
+lsof -i TCP:8000
+```
+
+- Everything is now set 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+
+- Go to grafana
+- Create a new dashboard and a new panel
+- In metrics, type `phs`
+- In an another panel, type `temperatures`
 - You should now see data pouring in.
