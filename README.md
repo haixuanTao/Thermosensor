@@ -52,10 +52,19 @@ PING raspberrypi.local (192.168.43.87) 56(84) bytes of data.
 ssh pi@raspberrypi.local
 ```
 
-- Password is: `raspberry`
+- Password is: `raspberry` (to change password type `passwd`)
 - If you see something like`pi@raspberrypi: ~ $`, Congrats, you're now developing on the raspberry-pi. 👯‍♀️👯‍♀️👯‍♀️
 
-The rest can be done directly by copying the content of installation.sh into the command line.
+- Connect on ssh to raspberry-pi.
+- type: `sudo raspi-config` in ssh console.
+- Select Interfacing Options
+- Select 1-Wire
+- Select Yes
+- Select Interfacing Options
+- Select SPI
+- Select Yes
+
+The rest can be done directly by copying the content of `installation.sh` into the command line.
 
 ## Kubernetes
 
@@ -301,8 +310,9 @@ while True:
 - Git clone the repo thermosensor and run it:
 
 ```
+cd ~
 git clone https://github.com/haixuanTao/Thermosensor
-cd Thermosensor
+cd ~/Thermosensor
 pip3 install -r requirement.txt
 sudo cp thermosensor/client.service /etc/systemd/system/client.service
 sudo systemctl start client.service
