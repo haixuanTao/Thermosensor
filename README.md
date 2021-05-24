@@ -294,7 +294,9 @@ while True:
 git clone https://github.com/haixuanTao/Thermosensor
 cd Thermosensor
 pip3 install -r requirement.txt
-python3 thermosensor/client.py &
+sudo cp thermosensor/client.service /etc/systemd/system/client.service
+sudo systemctl start client.service
+sudo systemctl enable client.service
 ```
 
 - You should now see data pouring in.

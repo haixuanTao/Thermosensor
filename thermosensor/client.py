@@ -36,5 +36,8 @@ if __name__ == "__main__":
     # Start up the server to expose the metrics.
     start_http_server(8000)
     while True:
-        REGISTRY.collect()
-        time.sleep(1)
+        try:
+            REGISTRY.collect()
+        except Exception as exc:
+            print(exc)
+        time.sleep(10)
