@@ -11,8 +11,7 @@ spec:
       - path: /
         pathType: Prefix
         backend:
-          serviceName: grafana-wakaze
-          servicePort: 3000
-  defaultBackend:
-    service:
-      name: traefik
+          service:
+            name: grafana-wakaze
+            port:
+              number: 3000
