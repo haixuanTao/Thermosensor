@@ -16,5 +16,3 @@ spec:
   defaultBackend:
     service:
       name: traefik
-      port:
-        number: 80
