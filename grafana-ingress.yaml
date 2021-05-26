@@ -13,3 +13,8 @@ spec:
         backend:
           serviceName: grafana-wakaze
           servicePort: 3000
+  defaultBackend:
+    service:
+      name: traefik
+      port:
+        number: 80
