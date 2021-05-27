@@ -5,8 +5,16 @@
 This is a guide to install kubernetes, prometheus and grafana onto the raspberry-pi in
 order to monitor temperature and ph for sake brewing.
 
-# Modus Operandi
+- This setup can have up to 26 Temperature sensors and 8 PH sensor on one raspberry pi.
 
+# Materials
+
+- Raspberry Pi 4 - 8 Gb Ram
+- DS18B20 Temperature sensor
+- Blue PH Sensor 
+- MCP3008 Analogic to Digital converter
+
+# Modus Operandi
 
 ## SD Card
 
